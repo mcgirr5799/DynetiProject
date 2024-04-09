@@ -122,9 +122,41 @@ class MainActivity : ComponentActivity() {
             // Connect the Preview instance to the PreviewView
             preview.setSurfaceProvider(previewView.surfaceProvider)
 
-            // When setting up the camera, include the ImageCapture and Preview in the camera's use cases
+            // Initialize the ImageAnalysis instance
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+
+            imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), { imageProxy ->
+                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+                // Convert the image to Bitmap
+                val bitmap = imageProxy.toBitmap()
+                // Convert the bitmap to a ByteBuffer
+                val byteBuffer = convertBitmapToByteBuffer(bitmap)
+                // Run the model on the ByteBuffer
+                val output = catDogImageClassifier.classify(byteBuffer)
+                // Handle the output
+                handleOutput(output)
+                imageProxy.close()
+            })
+
+            // When setting up the camera, include the ImageCapture, Preview and ImageAnalysis in the camera's use cases
             cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, imageCapture, preview, imageAnalysis)
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    // This is a placeholder function. You should replace this with your own implementation.
+    fun handleOutput(output: Array<FloatArray>) {
+        val confidence = sqrt(output[0][0] * output[0][0] + output[0][1] * output[0][1])
+        if (confidence > 0.5) {
+            if (output[0][0] > output[0][1]) {
+                Log.d("DynetiProject", "The image is classified as a cat with confidence $confidence")
+            } else {
+                Log.d("DynetiProject", "The image is classified as a dog with confidence $confidence")
+            }
+        } else {
+            Log.d("DynetiProject", "The image is not classified as a cat or a dog")
+        }
     }
 
     fun takePicture() {
@@ -167,11 +199,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
-        // Resize the bitmap to match the dimensions that your model expects
-        val modelInputSize = sqrt(602112 / 4.0).toInt() // Assuming the model takes input of size 602112 bytes and 4 bytes per pixel
+        val modelInputSize = 224 // Assuming the model takes input of size 224x224 pixels
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, modelInputSize, modelInputSize, true)
 
-        val byteBuffer = ByteBuffer.allocateDirect(602112)
+        val byteBuffer = ByteBuffer.allocateDirect(4 * modelInputSize * modelInputSize * 3) // 4 bytes for each pixel, 3 for RGB
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(resizedBitmap.width * resizedBitmap.height)
         resizedBitmap.getPixels(intValues, 0, resizedBitmap.width, 0, 0, resizedBitmap.width, resizedBitmap.height)
