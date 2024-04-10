@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372744929493",
+    "project_id": "dynetiproject",
+    "storage_bucket": "dynetiproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372744929493:android:94f70ad8bb0fc9995d225c",
+        "android_client_info": {
+          "package_name": "com.project.dynetiproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBBQC4-ulP63tGVBhDymJajbo7GxP_Rh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

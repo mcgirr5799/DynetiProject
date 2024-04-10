@@ -2,7 +2,6 @@ package com.project.dynetiproject
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.RectF
 import android.os.Bundle
@@ -45,8 +44,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.database.database
+import com.project.dynetiproject.data.saveToFirebaseDatabase
+import com.project.dynetiproject.model.ImageResult
 import java.io.File
-import java.io.FileOutputStream
 
 class MainActivity : ComponentActivity() {
 
@@ -88,6 +91,10 @@ class MainActivity : ComponentActivity() {
         }
 
         catDogImageClassifier = CatDogImageClassifier(this)
+
+        //MAKE FIREBASE CRASHLYTICS WORK
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().log("App started")
     }
 
     private fun requestCameraPermission() {
@@ -174,10 +181,24 @@ class MainActivity : ComponentActivity() {
                     val bitmap = BitmapFactory.decodeFile(savedUri.path)
                     imageBitmap = bitmap.asImageBitmap()
 
-                    // Process the image with your model
                     val byteBuffer = catDogImageClassifier.convertBitmapToByteBuffer(bitmap)
                     val output = catDogImageClassifier.classify(byteBuffer)
                     val detectionResult = catDogImageClassifier.handleOutput(output)
+
+                    val imageResult = ImageResult(
+                        key = Firebase.database.reference.push().key ?: throw IllegalArgumentException("Failed to generate a key"),
+                        filename = filename,
+                        className = detectionResult.className,
+                        confidence = detectionResult.confidence,
+                        boundingBox = mapOf(
+                            "left" to detectionResult.boundingBox.left,
+                            "top" to detectionResult.boundingBox.top,
+                            "right" to detectionResult.boundingBox.right,
+                            "bottom" to detectionResult.boundingBox.bottom
+                        )
+                    )
+
+                    saveToFirebaseDatabase(imageResult)
 
                     Log.d("Take Picture", "Result: " +  output.toString() + " " + detectionResult.className + " " + detectionResult.confidence + " " + detectionResult.boundingBox.toString() + " " + savedUri.toString())
                     Log.d("MainActivity", "Saved image to: ${photoFile.absolutePath}")
@@ -187,6 +208,7 @@ class MainActivity : ComponentActivity() {
                 override fun onError(exception: ImageCaptureException) {
                     isTakingPicture = false
                     Toast.makeText(this@MainActivity, "Photo capture failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    FirebaseCrashlytics.getInstance().recordException(exception)
                 }
             }
         )

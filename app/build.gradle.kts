@@ -1,7 +1,12 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
+
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.firebase.crashlytics")
 }
+
 
 android {
     namespace = "com.project.dynetiproject"
@@ -13,8 +18,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -65,6 +69,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.camera.view)
     implementation(project(":DynetiSDK"))
+    implementation(libs.firebase.crashlytics.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,4 +86,9 @@ dependencies {
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha05")
 
     implementation("org.tensorflow:tensorflow-lite:2.7.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.google.firebase:firebase-database-ktx:20.0.3")
 }
