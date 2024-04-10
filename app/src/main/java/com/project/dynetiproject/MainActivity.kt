@@ -1,6 +1,7 @@
 package com.project.dynetiproject
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.RectF
@@ -39,9 +40,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.Firebase
@@ -49,7 +52,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.database
 import com.project.dynetiproject.data.saveToFirebaseDatabase
 import com.project.dynetiproject.model.ImageResult
+import com.project.dynetiproject.ui.theme.DynetiProjectTheme
 import java.io.File
+import java.sql.Timestamp
 
 class MainActivity : ComponentActivity() {
 
@@ -195,7 +200,8 @@ class MainActivity : ComponentActivity() {
                             "top" to detectionResult.boundingBox.top,
                             "right" to detectionResult.boundingBox.right,
                             "bottom" to detectionResult.boundingBox.bottom
-                        )
+                        ),
+                        timestamp = Timestamp(System.currentTimeMillis())
                     )
 
                     saveToFirebaseDatabase(imageResult)
@@ -218,13 +224,18 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionResult: CatDogImageClassifier.DetectionResult, isTakingPicture: Boolean) {
-    MaterialTheme {
+    DynetiProjectTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             TopAppBar(
                 title = { Text(text = "Cat/Dog Recognition") },
                 modifier = Modifier.fillMaxWidth(),
                 actions = {
-                    IconButton(onClick = { /* Handle click here */ }) {
+                    val context = LocalContext.current
+                    IconButton(onClick = {
+                        //launch ListActivity
+                        val intent = Intent(context, ListActivity::class.java)
+                        context.startActivity(intent)
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.List, contentDescription = "List")
                     }
                 }
