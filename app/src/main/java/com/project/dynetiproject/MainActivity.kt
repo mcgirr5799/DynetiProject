@@ -227,7 +227,11 @@ fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionR
     DynetiProjectTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             TopAppBar(
-                title = { Text(text = "Cat/Dog Recognition") },
+                title = {
+                    Text(text = "Cat/Dog Recognition",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
                 actions = {
                     val context = LocalContext.current
