@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -225,63 +226,64 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionResult: CatDogImageClassifier.DetectionResult, isTakingPicture: Boolean) {
     DynetiProjectTheme {
-        Column(modifier = Modifier.fillMaxSize()) {
-            TopAppBar(
-                title = {
-                    Text(text = "Cat/Dog Recognition",
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-                actions = {
-                    val context = LocalContext.current
-                    IconButton(onClick = {
-                        //launch ListActivity
-                        val intent = Intent(context, ListActivity::class.java)
-                        context.startActivity(intent)
-                    }) {
-                        Icon(Icons.AutoMirrored.Filled.List, contentDescription = "List")
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column {
+                TopAppBar(
+                    title = {
+                        Text(text = "Cat/Dog Recognition",
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    },
+                    actions = {
+                        val context = LocalContext.current
+                        IconButton(onClick = {
+                            //launch ListActivity
+                            val intent = Intent(context, ListActivity::class.java)
+                            context.startActivity(intent)
+                        }) {
+                            Icon(Icons.AutoMirrored.Filled.List, contentDescription = "List")
+                        }
                     }
-                }
-            )
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-            ) {
-                AndroidView(
-                    factory = { previewView },
-                    modifier = Modifier.fillMaxSize()
-                ) { view ->
-                    // No need to do anything here, the camera preview is handled by the AndroidView
-                }
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                ) {
+                    AndroidView(
+                        factory = { previewView },
+                        modifier = Modifier.fillMaxSize()
+                    ) { view ->
+                        // No need to do anything here, the camera preview is handled by the AndroidView
+                    }
 
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    drawRect(
-                        color = Color.Red,
-                        topLeft = Offset(detectionResult.boundingBox.left, detectionResult.boundingBox.top),
-                        size = Size(detectionResult.boundingBox.width(), detectionResult.boundingBox.height()),
-                        style = Stroke(width = 2f)
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawRect(
+                            color = Color.Red,
+                            topLeft = Offset(detectionResult.boundingBox.left, detectionResult.boundingBox.top),
+                            size = Size(detectionResult.boundingBox.width(), detectionResult.boundingBox.height()),
+                            style = Stroke(width = 2f)
+                        )
+                    }
+
+                    Text(
+                        text = "${detectionResult.className} (${"%.2f".format(detectionResult.confidence)})",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(16.dp)
                     )
                 }
-
-                Text(
-                    text = "${detectionResult.className} (${"%.2f".format(detectionResult.confidence)})",
-                    color = Color.White,
+                Button(
+                    onClick = { onTakePicture() },
                     modifier = Modifier
-                        .align(Alignment.TopStart)
+                        .fillMaxWidth()
                         .padding(16.dp)
-                )
-            }
-            Button(
-                onClick = { onTakePicture() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally),
-                enabled = !isTakingPicture
-            ) {
-                Text(text = if (isTakingPicture) "Taking Picture..." else "Take Picture")
+                        .align(Alignment.CenterHorizontally),
+                    enabled = !isTakingPicture
+                ) {
+                    Text(text = if (isTakingPicture) "Taking Picture..." else "Take Picture")
+                }
             }
         }
     }
