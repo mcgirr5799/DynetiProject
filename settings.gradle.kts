@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "DynetiProject"
 include(":app")
- 
+include(":DynetiSDK")

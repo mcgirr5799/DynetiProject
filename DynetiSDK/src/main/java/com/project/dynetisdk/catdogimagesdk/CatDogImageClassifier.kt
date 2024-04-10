@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
-import com.project.dynetiproject.catdogimagesdk.TFLiteModel
+import com.project.dynetisdk.catdogimagesdk.TFLiteModel
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

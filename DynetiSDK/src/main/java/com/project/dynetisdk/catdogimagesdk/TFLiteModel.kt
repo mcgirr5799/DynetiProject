@@ -1,4 +1,4 @@
-package com.project.dynetiproject.catdogimagesdk
+package com.project.dynetisdk.catdogimagesdk
 
 import android.content.Context
 import android.content.res.AssetFileDescriptor

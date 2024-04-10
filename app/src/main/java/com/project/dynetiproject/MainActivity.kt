@@ -20,7 +20,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -157,7 +157,7 @@ class MainActivity : ComponentActivity() {
 
         isTakingPicture = true
 
-        val imageCapture = imageCapture ?: return
+        val imageCapture = imageCapture
 
         val filename = "image_${System.currentTimeMillis()}.jpg"
         val photoFile = File(filesDir, filename)
@@ -203,7 +203,7 @@ fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionR
                 modifier = Modifier.fillMaxWidth(),
                 actions = {
                     IconButton(onClick = { /* Handle click here */ }) {
-                        Icon(Icons.Default.List, contentDescription = "List")
+                        Icon(Icons.AutoMirrored.Filled.List, contentDescription = "List")
                     }
                 }
             )

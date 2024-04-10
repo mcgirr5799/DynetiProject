@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.camera.view)
+    implementation(project(":DynetiSDK"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
