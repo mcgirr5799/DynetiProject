@@ -20,8 +20,8 @@ I also found that the model given wasn't quite accurate; I've tested it quite a 
 
 ## Screenshots
 
-![Main Screen](screenshots/CatImage.png)
-![Main Screen](screenshots/ListImage.png)
+![Main Screen](Screenshots/CatImage.png)
+![Main Screen](Screenshots/ListImage.png)
 
 ## Components
 
