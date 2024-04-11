@@ -78,6 +78,9 @@ class ListActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Composable function that loads and displays the data.
+     */
     @Composable
     fun LoadAndDisplayData() {
         val context = LocalContext.current
@@ -112,6 +115,12 @@ class ListActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * Composable function that displays the list of image results.
+ *
+ * @param list The list of ImageResult objects to display.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

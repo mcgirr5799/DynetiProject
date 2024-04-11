@@ -107,11 +107,17 @@ class MainActivity : ComponentActivity() {
         FirebaseCrashlytics.getInstance().log("App started")
     }
 
+    /**
+     * Requests the camera permission from the user.
+     */
     private fun requestCameraPermission() {
         //camera permission
         requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
+    /**
+     * Starts the camera and sets up the image capture, preview, and analysis use cases.
+     */
     private fun startCamera() {
         val previewView = PreviewView(this@MainActivity)
 
@@ -169,6 +175,10 @@ class MainActivity : ComponentActivity() {
 
     var isTakingPicture by mutableStateOf(false)
 
+    /**
+     * Captures an image, saves it to a file, runs it through the TensorFlow Lite model,
+     * and saves the classification result to Firebase.
+     */
     fun takePicture() {
         if (isTakingPicture) return
 
@@ -226,6 +236,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Composable function that displays the camera screen.
+ *
+ * @param previewView The PreviewView that displays the camera preview.
+ * @param onTakePicture The function to call when the take picture button is clicked.
+ * @param detectionResult The result of the image classification.
+ * @param isTakingPicture A boolean that indicates whether an image is currently being captured.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionResult: DetectionResult, isTakingPicture: Boolean) {

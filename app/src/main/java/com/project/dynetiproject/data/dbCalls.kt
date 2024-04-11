@@ -11,6 +11,13 @@ import com.project.dynetisdk.catdogimagesdk.model.DetectionResult
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
+/**
+ * Creates an ImageResult object from the given filename and detection result.
+ *
+ * @param filename The name of the file where the image is stored.
+ * @param detectionResult The result of the image classification.
+ * @return An ImageResult object.
+ */
 fun createImageResult(filename: String, detectionResult: DetectionResult): ImageResult {
     val key = Firebase.database.reference.push().key ?: throw IllegalArgumentException("Failed to generate a key")
 
@@ -28,6 +35,12 @@ fun createImageResult(filename: String, detectionResult: DetectionResult): Image
         timestamp = Timestamp(System.currentTimeMillis())
     )
 }
+
+/**
+ * Saves an ImageResult object to the Firebase database.
+ *
+ * @param imageResult The ImageResult object to save.
+ */
 fun saveToFirebaseDatabase(imageResult: ImageResult) {
     val database = Firebase.database
     database.getReference("images/${imageResult.key}").setValue(imageResult)
@@ -40,6 +53,11 @@ fun saveToFirebaseDatabase(imageResult: ImageResult) {
         }
 }
 
+/**
+ * Gathers all the image classifications from the Firebase database and passes them to the given callback function.
+ *
+ * @param onResult The callback function to pass the list of ImageResult objects to.
+ */
 fun gatherClassifications(onResult: (List<ImageResult>) -> Unit) {
     val resultList = mutableListOf<ImageResult>()
 
