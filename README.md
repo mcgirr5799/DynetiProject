@@ -34,9 +34,7 @@ To use the application, grant the camera permission when prompted. Press the "Ta
 
 To install the application, clone the repository and open the project in Android Studio. Build the project and run it on an Android device or emulator.
 
-## Contributing
-
-Contributions are welcome. Please open an issue to discuss your ideas or submit a pull request.
+I've also included the APK in the root of the project ('app-debug.apk'). As an alternative, you can download the APK and sideload it onto your device.
 
 ## License
 
