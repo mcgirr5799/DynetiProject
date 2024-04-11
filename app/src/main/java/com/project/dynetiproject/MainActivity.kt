@@ -19,6 +19,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Button
@@ -42,7 +43,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
@@ -54,6 +57,7 @@ import com.google.firebase.database.database
 import com.project.dynetiproject.data.saveToFirebaseDatabase
 import com.project.dynetiproject.model.ImageResult
 import com.project.dynetiproject.ui.theme.DynetiProjectTheme
+import com.project.dynetisdk.catdogimagesdk.model.DetectionResult
 import java.io.File
 import java.sql.Timestamp
 
@@ -113,7 +117,7 @@ class MainActivity : ComponentActivity() {
 
         // Initialize a MutableState for the DetectionResult
         var detectionResult by mutableStateOf(
-            CatDogImageClassifier.DetectionResult(
+            DetectionResult(
                 "Unknown",
                 0f,
                 RectF()
@@ -224,13 +228,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionResult: CatDogImageClassifier.DetectionResult, isTakingPicture: Boolean) {
+fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionResult: DetectionResult, isTakingPicture: Boolean) {
     DynetiProjectTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column {
                 TopAppBar(
                     title = {
-                        Text(text = "Cat/Dog Recognition",
+                        Text(text = stringResource(id = R.string.topbar_title),
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
                     },
@@ -269,20 +273,23 @@ fun CameraScreen(previewView: PreviewView, onTakePicture: () -> Unit, detectionR
                     Text(
                         text = "${detectionResult.className} (${"%.2f".format(detectionResult.confidence)})",
                         color = Color.White,
+                        fontSize = 24.sp,
                         modifier = Modifier
                             .align(Alignment.TopStart)
-                            .padding(16.dp)
+                            .padding(24.dp)
+
                     )
                 }
                 Button(
                     onClick = { onTakePicture() },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(8.dp)
                         .align(Alignment.CenterHorizontally),
-                    enabled = !isTakingPicture
+                    enabled = !isTakingPicture,
+                    shape = MaterialTheme.shapes.large.copy(topStart = ZeroCornerSize, topEnd = ZeroCornerSize ,bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize)
                 ) {
-                    Text(text = if (isTakingPicture) "Taking Picture..." else "Take Picture")
+                    Text(text = if (isTakingPicture) stringResource(id = R.string.processing_image) else stringResource(id = R.string.take_picture))
                 }
             }
         }

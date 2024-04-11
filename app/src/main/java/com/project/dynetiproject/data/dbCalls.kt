@@ -7,10 +7,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.project.dynetiproject.CatDogImageClassifier
 import com.project.dynetiproject.model.ImageResult
+import com.project.dynetisdk.catdogimagesdk.model.DetectionResult
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-fun createImageResult(filename: String, detectionResult: CatDogImageClassifier.DetectionResult): ImageResult {
+fun createImageResult(filename: String, detectionResult: DetectionResult): ImageResult {
     val key = Firebase.database.reference.push().key ?: throw IllegalArgumentException("Failed to generate a key")
 
     return ImageResult(

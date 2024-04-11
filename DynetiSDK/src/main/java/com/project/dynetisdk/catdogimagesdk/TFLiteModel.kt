@@ -8,6 +8,12 @@ import java.nio.ByteBuffer
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
+/**
+ * Represents a TensorFlow Lite model for cat and dog classification.
+ *
+ * @param context The context of the application or activity.
+ * @param modelName The name of the TensorFlow Lite model file with extension.
+ */
 class TFLiteModel(context: Context, modelName: String) {
     private val interpreter: Interpreter
 
@@ -27,6 +33,12 @@ class TFLiteModel(context: Context, modelName: String) {
         }
     }
 
+    /**
+     * Classifies the input ByteBuffer using the TensorFlow Lite model.
+     *
+     * @param input The input ByteBuffer containing the image data.
+     * @return An array of float arrays representing the classification output.
+     */
     fun classify(input: ByteBuffer): Array<FloatArray> {
         val output = Array(1) { FloatArray(2) } // Adjust this to match the output shape of your model
         interpreter.run(input, output)

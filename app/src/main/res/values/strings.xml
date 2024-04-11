@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">DynetiProject</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="topbar_title">Cat/Dog Recognition</string>
+    <string name="take_picture">Take a picture</string>
+    <string name="sort_by_timestamp">Sort by timestamp</string>
+    <string name="sort_by_classification">Sort by classification</string>
+    <string name="sort_by_confidence">Sort by confidence</string>
+    <string name="sort_by_descending">Sort by descending</string>
+    <string name="sort_by_ascending">Sort by ascending</string>
+    <string name="processing_image">Processing image...</string>
 </resources>

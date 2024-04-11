@@ -51,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.database.FirebaseDatabase
@@ -128,7 +129,7 @@ fun ListComposable(list: List<ImageResult>) {
         Column {
             TopAppBar(
                 title = {
-                    Text(text = "Cat/Dog Recognition")
+                    Text(text = stringResource(id = R.string.topbar_title))
                 },
                 actions = {
                     IconButton(onClick = { isMenuExpanded = true }) {
@@ -142,28 +143,28 @@ fun ListComposable(list: List<ImageResult>) {
                         onDismissRequest = { isMenuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            { Text("Sort by timestamp")},
+                            { Text(stringResource(id = R.string.sort_by_timestamp)) },
                             onClick = {
                                 sortOption = "timestamp"
                                 isMenuExpanded = false
                             }
                         )
                         DropdownMenuItem(
-                            { Text("Sort by classification")},
+                            { Text(stringResource(id = R.string.sort_by_classification))},
                             onClick = {
                                 sortOption = "classification"
                                 isMenuExpanded = false
                             }
                         )
                         DropdownMenuItem(
-                            { Text("Sort by confidence")},
+                            { Text(stringResource(id = R.string.sort_by_confidence))},
                             onClick = {
                                 sortOption = "confidence"
                                 isMenuExpanded = false
                             }
                         )
                         DropdownMenuItem(
-                            { Text(if (isSortAscending) "Sort descending" else "Sort ascending") },
+                            { Text(if (isSortAscending) stringResource(id = R.string.sort_by_descending) else stringResource(id = R.string.sort_by_ascending)) },
                             onClick = {
                                 isSortAscending = !isSortAscending
                                 isMenuExpanded = false

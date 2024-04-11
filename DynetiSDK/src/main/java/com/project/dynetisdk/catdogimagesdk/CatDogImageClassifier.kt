@@ -5,16 +5,37 @@ import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
 import com.project.dynetisdk.catdogimagesdk.TFLiteModel
+import com.project.dynetisdk.catdogimagesdk.model.DetectionResult
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+/**
+ * A classifier for detecting cats and dogs in images.
+ *
+ * @param context The context of the application or activity.
+ */
 class CatDogImageClassifier(context: Context) {
     private val model: TFLiteModel = TFLiteModel(context, "catDogModel.tflite") // Replace "model.tflite" with your model's name
+
+    // for testing purposes
+    val assetFileDescriptor = context.assets.openFd("catDogModel.tflite")
+    /**
+     * Classifies the input image represented by a ByteBuffer.
+     *
+     * @param input The input ByteBuffer containing the image data.
+     * @return An array of float arrays representing the classification output.
+     */
     fun classify(input: ByteBuffer): Array<FloatArray> {
         return model.classify(input)
     }
 
+    /**
+     * Converts a Bitmap image to a ByteBuffer suitable for model input.
+     *
+     * @param bitmap The input Bitmap image to be converted.
+     * @return A ByteBuffer containing the image data in a suitable format for model input.
+     */
     fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
         val modelInputSize = 224 // Assuming the model takes input of size 224x224 pixels
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, modelInputSize, modelInputSize, true)
@@ -35,8 +56,12 @@ class CatDogImageClassifier(context: Context) {
         return byteBuffer
     }
 
-    data class DetectionResult(val className: String, val confidence: Float, val boundingBox: RectF)
-
+    /**
+     * Handles the model output and generates a DetectionResult object.
+     *
+     * @param output The output array from the model.
+     * @return A DetectionResult object representing the detected object.
+     */
     fun handleOutput(output: Array<FloatArray>): DetectionResult {
         val maxIndex = output[0].indices.maxByOrNull { output[0][it] } ?: -1
         val confidence = output[0][maxIndex]
@@ -45,6 +70,13 @@ class CatDogImageClassifier(context: Context) {
         return DetectionResult(className, confidence, boundingBox)
     }
 
+    /**
+     * Saves the model output and the image URI to a file.
+     *
+     * @param output The output array from the model.
+     * @param imageUri The URI of the input image.
+     * @param outputDirectory The directory where the output file will be saved.
+     */
     fun saveOutputAndImage(output: Array<FloatArray>, imageUri: Uri, outputDirectory: File) {
         // Convert the output to a string
         val outputString = output.joinToString(separator = ", ") { it.joinToString() }

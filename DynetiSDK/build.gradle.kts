@@ -34,6 +34,8 @@ android {
 
 dependencies {
 
+    testImplementation("org.robolectric:robolectric:4.12.1")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
